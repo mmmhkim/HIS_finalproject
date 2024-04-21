@@ -1,0 +1,5 @@
+sklearn
+pandas
+streamlit
+psycopg2
+sqlalchemy
