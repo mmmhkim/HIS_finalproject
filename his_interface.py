@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import PyPDF2
 from streamlit import session_state as ss
 import psycopg2
 from sqlalchemy import create_engine
