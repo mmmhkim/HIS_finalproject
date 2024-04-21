@@ -368,7 +368,7 @@ def main(df, model):
                 if(y_pred == 1):
                     st.image('hrt.jpg')
                 else:
-                    st.write("Suggestions: " + str(y_pred))
+                    st.image('nonhrt.jpg')
                 if st.button("Back to responses"):
                     response = False
 
