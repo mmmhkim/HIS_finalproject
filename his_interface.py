@@ -247,10 +247,10 @@ def main(df, model):
                 row = df[df["SWANID"] == int(swanID)]
                 st.write(row)
                 with st.container(border=True):
-                    st.image("OneDrive/Documents/Work/CMU_grad/spring2024/healthIS/his_finalproject_variables_page-0001.jpg")
-                    st.image("OneDrive/Documents/Work/CMU_grad/spring2024/healthIS/his_finalproject_variables_page-0002.jpg")
-                    st.image("OneDrive/Documents/Work/CMU_grad/spring2024/healthIS/his_finalproject_variables_page-0003.jpg")
-                    st.image("OneDrive/Documents/Work/CMU_grad/spring2024/healthIS/his_finalproject_variables_page-0004.jpg")
+                    st.image("his_finalproject_variables_page-0001.jpg")
+                    st.image("his_finalproject_variables_page-0002.jpg")
+                    st.image("his_finalproject_variables_page-0003.jpg")
+                    st.image("his_finalproject_variables_page-0004.jpg")
             else:
                 st.write("Not a valid SwanID. Please enter again.")
 
@@ -364,7 +364,7 @@ def main(df, model):
 
             with st.container(border=True):
                 if(y_pred == 1):
-                    st.image('OneDrive/Documents/Work/CMU_grad/spring2024/healthIS/hrt.jpg')
+                    st.image('hrt.jpg')
                 else:
                     st.write("Suggestions: " + str(y_pred))
                 if st.button("Back to responses"):
