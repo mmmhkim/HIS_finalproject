@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import PyPDF2
 from streamlit import session_state as ss
 import psycopg2
 from sqlalchemy import create_engine
@@ -8,6 +9,9 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+
+def getdata2():
+    return pd.read_csv("allyears.csv")
 
 def getdata():
     # gather data sources from sql database
@@ -370,7 +374,7 @@ def main(df, model):
                     response = False
 
 if __name__ == "__main__":
-    df = getdata()
+    df = getdata2()
     updated_df = createData(df)
     model = getModel(updated_df)
     main(df, model)
