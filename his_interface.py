@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import PyPDF2
 from streamlit import session_state as ss
 import psycopg2
 from sqlalchemy import create_engine
@@ -52,9 +53,9 @@ def getdata():
 
     return allyears_df
 
-def getInputs(question1, question2, question3, question4,
+def getInputs(question1, question3, question4,
               question5, question6, question7, question8,
-              question9, question10, question11):
+              question9, question11):
         
         # convert questions from string to int to feed into our model
         # question 1
@@ -66,12 +67,6 @@ def getInputs(question1, question2, question3, question4,
             q1 = 4
         else:
             q1 = 2
-        
-        # question 2
-        if question2 == "Yes":
-            q2 = 2
-        else:
-            q2 = 1
         
         # question 3
         if question3 == "Every day":
@@ -171,12 +166,6 @@ def getInputs(question1, question2, question3, question4,
         else:
             q9 = -1
         
-        # question 10
-        if question10 == "Yes":
-            q10 = 2
-        else:
-            q10 = 1
-        
         # question 11
         if question11 == "Hysterectomy/both ovaries removed":
             q11 = 1
@@ -195,7 +184,7 @@ def getInputs(question1, question2, question3, question4,
         else:
             q11 = 8
         
-        return q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11
+        return q1, q3, q4, q5, q6, q7, q8, q9, q11
 
 # create the target column
 # 1 means hormone therapy, and 0 means non-hormonal tretament
@@ -222,15 +211,14 @@ def createData(df):
 def getModel(df):
     X = df[['RACE', 'PELVIC0',
        'MOODCHG0', 'OUTCM20', 'OUTCM30', "OUTCM10",
-       'PROGES15', 'ESTLSTV5',
        'STATUS10',
        'HOTFLAS10',
        'VAGINDR10']]
     y = df.Target
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
-    clf = MLPClassifier(solver='adam', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
-    clf.fit(X_train, y_train)
-    return clf
+    rf = RandomForestClassifier()
+    rf.fit(X_train, y_train)
+    return rf
 
 def main(df, model):
     st.title("Menopausal Symptom Management CDSS")
@@ -268,9 +256,6 @@ def main(df, model):
                     'Black or African American',
                     'Native Hawaiian or Other Pacific Islander',
                     'White'])
-            question2 = st.radio('Have you been using estrogen/progestin pills prior?',
-                    ['Yes',
-                    'No']) # 1 no
             question3 = st.radio('Have you been experiencing hot flashes in the past two weeks?',
                     ['Every day',
                     '9-13 days',
@@ -320,9 +305,6 @@ def main(df, model):
                     'Tubal(Ectopic) Pregnancy',
                     'Still Pregnant',
                     'N/A']) #1-6, -1 N/A
-            question10 = st.radio('Are you currently taking progestin pill #1 (ex. Provera)?',
-                    ['Yes',
-                    'No']) # 1 no
             question11 = st.radio('What is your current menopausal status?',
                     ['Hysterectomy/both ovaries removed',
                     'Post-menopausal',
@@ -338,9 +320,9 @@ def main(df, model):
                 response = True
         
         if response == True:
-            q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11 = getInputs(question1, question2, question3, question4,
+            q1, q3, q4, q5, q6, q7, q8, q9, q11 = getInputs(question1, question3, question4,
                                                             question5, question6, question7, question8,
-                                                            question9, question10, question11)
+                                                            question9,  question11)
             
             # manually create data
             temp = {'RACE': [q1],
@@ -349,20 +331,11 @@ def main(df, model):
                     'OUTCM20': [q9],
                     'OUTCM30': [q8],
                     'OUTCM10': [q7],
-                    'PROGES15': [q10],
-                    'ESTLSTV5': [q2],
                     'STATUS10': [q11],
                     'HOTFLAS10': [q3],
                     'VAGINDR10': [q4]}
             data = pd.DataFrame(temp)
             y_pred = model.predict(data)
-            print(data)
-            print(y_pred)
-            
-            if(y_pred[0] == 0):
-                y_pred = 1
-            else:
-                y_pred = 0
 
             with st.container(border=True):
                 if(y_pred == 1):
