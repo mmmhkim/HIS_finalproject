@@ -14,20 +14,10 @@ def getdata2():
 
 def getdata():
     # gather data sources from sql database
-    conn_string = 'postgresql://postgres:postgres@localhost/postgres'
+    conn_string = 'postgresql://HIS_users:superflyroxsaw@127.0.0.1:5432/postgres'
   
     db = create_engine(conn_string) 
-    conn = db.connect() 
-    conn1 = psycopg2.connect( 
-        database="postgres", 
-    user='HIS_users',  
-    password='superflyroxsaw',  
-    host='127.0.0.1',  
-    port= '5432'
-    ) 
-
-    conn1.autocommit = True
-    cursor = conn1.cursor() 
+    #conn = db.connect() 
 
     year0 = pd.read_sql_query('SELECT * FROM year0', con=db)
 
@@ -35,8 +25,8 @@ def getdata():
 
     year10 = pd.read_sql_query('SELECT * FROM year10', con=db)
 
-    conn.commit()
-    conn.close()
+    #conn.commit()
+    #conn.close()
 
     # merge the data sources
     temp_df = pd.merge(year0, year5, on='SWANID')
