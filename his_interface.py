@@ -22,7 +22,7 @@ def getdata():
         database="postgres", 
     user='HIS_users',  
     password='superflyroxsaw',  
-    host='localhost',  
+    host='127.0.0.1',  
     port= '5432'
     ) 
 
