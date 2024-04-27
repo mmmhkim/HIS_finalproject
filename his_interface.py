@@ -335,7 +335,7 @@ def main(df, model):
                     response = False
 
 if __name__ == "__main__":
-    df = getdata()
+    df = getdata2()
     updated_df = createData(df)
     model = getModel(updated_df)
     main(df, model)
