@@ -20,8 +20,8 @@ def getdata():
     conn = db.connect() 
     conn1 = psycopg2.connect( 
         database="postgres", 
-    user='postgres',  
-    password='postgres',  
+    user='HIS_users',  
+    password='superflyroxsaw',  
     host='localhost',  
     port= '5432'
     ) 
